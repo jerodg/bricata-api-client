@@ -1,0 +1,30 @@
+[[source]]
+url = 'https://pypi.python.org/simple'
+verify_ssl = true
+name = 'pypi'
+
+[dev-packages]
+better-exceptions = "*"
+mkdocs = "*"
+mkdocs-material = "*"
+pymdown-extensions = "*"
+pytest = "*"
+pytest-asyncio = "*"
+pytest-cov = "*"
+setuptools = "*"
+twine = "*"
+wheel = "*"
+
+[packages]
+aiodns = "*"
+aiohttp = "*"
+#base-api-client = "*"
+cchardet = "*"
+tenacity = "*"
+ujson = "*"
+
+[requires]
+python_version = "3.8"
+
+[pipenv]
+allow_prereleases = true
