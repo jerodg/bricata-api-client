@@ -12,6 +12,9 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 SSPL for more details.
 
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
 import logging
@@ -29,7 +32,7 @@ def readme() -> str:
 
 def main() -> NoReturn:
     setup(name='bricata-api-client',
-          version='0!1.0a1.dev1',
+          version='0!1.0a1.dev2',
           description='Bricata API Client Library',
           long_description=readme(),
           long_description_content_type='text/markdown',

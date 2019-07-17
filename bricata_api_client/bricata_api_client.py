@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.8
 """Bricata API Client
-Copyright © 2019 Jerod Gawne <https://github.com/jerodg/>
+Copyright © 2019. Jerod Gawne <https://github.com/jerodg/>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the Server Side Public License (SSPL) as
@@ -12,27 +12,40 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 SSPL for more details.
 
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
-import logging
-from asyncio import Semaphore
-from json.decoder import JSONDecodeError
-from typing import List, Optional, Union
 import asyncio
+import logging
+from ssl import create_default_context, Purpose
+from typing import Optional, Union
+
 import aiohttp as aio
 import ujson
-from base_api_client.base_api_client import BaseApiClient
 from tenacity import after_log, before_sleep_log, retry, retry_if_exception_type, stop_after_attempt, wait_random_exponential
 
-logger = logging.getLogger(__name__).addHandler(logging.NullHandler())
+from base_api_client.base_api_client import BaseApiClient
+
+logger = logging.getLogger(__name__)
 
 
 class BricataApiClient(BaseApiClient):
+    """Bricata API Client
+
+    Attributes:
+    """
     SEM: int = 5  # This defines the number of parallel async requests to make.
 
-    def __init__(self, cfg: Optional[Union[str, dict]] = None, sem: Optional[int] = None):
-        BaseApiClient.__init__(cfg=cfg, sem=sem or self.SEM)
-        self.header = {'Content-Type':  'application/json; charset=utf-8'}
+    def __init__(self, cfg: Union[str, dict], sem: Optional[int] = None):
+        BaseApiClient.__init__(self, cfg=cfg, sem=sem or self.SEM)
+
+        self.header = {'Content-Type': 'application/json; charset=utf-8'}
+        self.proxy = None
+        self.proxy_auth = None
+        self.ssl = None
+        self.load_config()
 
     def __enter__(self):
         return self
@@ -40,19 +53,33 @@ class BricataApiClient(BaseApiClient):
     def __exit__(self, exc_type, exc_val, exc_tb):
         BaseApiClient.__exit__(self, exc_type, exc_val, exc_tb)
 
-    async def login(self):
-        data = {'username': self.cfg['Bricata']['username'], 'password': self.cfg['Bricata']['password']}
+    def load_config(self):
+        proxy_uri = self.cfg['Proxy'].pop('URI', None)
+        if proxy_uri:
+            proxy_port = self.cfg['Proxy'].pop('Port')
+            proxy_user = self.cfg['Proxy'].pop('Username')
+            proxy_pass = self.cfg['Proxy'].pop('Password')
+            self.proxy = f'{proxy_uri}:{proxy_port}'
+            self.proxy_auth = aio.BasicAuth(login=proxy_user, password=proxy_pass)
 
-        async with aio.ClientSession(headers=self.header) as session:
+        ssl_path = self.cfg['Options'].pop('CAPath', None)
+        if ssl_path:
+            self.ssl = create_default_context(purpose=Purpose.CLIENT_AUTH, capath=ssl_path)
+        else:
+            self.ssl = self.cfg['Options'].pop('VerifySSL', True)
+
+    async def login(self) -> dict:
+        data = {'username': self.cfg['Auth']['Username'], 'Password': self.cfg['Auth']['Password']}
+
+        async with aio.ClientSession(headers=self.header, json_serialize=ujson.dumps) as session:
             logger.debug('Logging In...')
 
-            tasks = [asyncio.create_task(self.__login(session=session, data=ujson.dumps(payload)))]
+            tasks = [asyncio.create_task(self.__login(session=session, data=ujson.dumps(data)))]
             results = await asyncio.gather(*tasks)
 
-            self.header['Authorization'] = f'Bearer {results[0]["access_token"]}'
+            self.header['Authorization'] = f'{results[0]["token_type"]} {results[0]["token"]}'
 
-            if NFO:
-                logger.info('\tComplete.')
+            logger.debug('-> Complete.')
 
         await session.close()
 
@@ -61,14 +88,14 @@ class BricataApiClient(BaseApiClient):
     @retry(retry=retry_if_exception_type(aio.ClientError),
            wait=wait_random_exponential(multiplier=1.25, min=3, max=60),
            after=after_log(logger, logging.DEBUG),
-           stop=stop_after_attempt(7),
-           before_sleep=before_sleep_log(logger, logging.DEBUG))
+           stop=stop_after_attempt(5),
+           before_sleep=before_sleep_log(logger, logging.WARNING))
     async def __login(self, session: aio.ClientSession, data: dict) -> Union[dict, aio.ClientResponse]:
         async with self.sem:
-            response = await session.post(self.URI_AUTH, ssl=self.VERIFY_SSL, data=data, proxy=self.PROXY)
-            if 200 <= response.status <= 299:
-                return await response.json()
-            elif response.status == 429:
+            response = await session.post(f'{self.cfg["URI"]["Base"]}/login/', ssl=self.ssl, data=data, proxy=self.proxy)
+            if response.status == 200:
+                return {'token': await response.text(encoding='utf-8'), 'token_type': 'Bearer'}
+            elif response.status == 503:
                 raise aio.ClientError
             else:
                 return response

@@ -16,6 +16,9 @@ nav:
 #  - Installation: 'install.md'
 #  - Usage: 'use.md'
 #  - Test: 'test.md'
+plugins:
+  - search:
+      lang: en
 remote_branch: gh-pages
 remote_name: origin
 repo_url:
