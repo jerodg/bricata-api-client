@@ -4,10 +4,13 @@
 | _ \ '_| / _/ _` |  _/ _` |  / _ \|  _/| |  | (__| | / -_) ' \  _|
 |___/_| |_\__\__,_|\__\__,_| /_/ \_\_| |___|  \___|_|_\___|_||_\__|
 ```
-![platform](https://img.shields.io/badge/platform-Linux/Unix/Windows-blue.svg)
-![python](https://img.shields.io/badge/python-3.6/7/8%2B-blue.svg)
-![license](https://img.shields.io/badge/license-SSPL-green.svg)
-![0%](https://img.shields.io/badge/coverage-0%25-red.svg)
+![platform](https://img.shields.io/badge/Platform-Linux/Unix/Windows-blue.svg)
+![python](https://img.shields.io/badge/Python-3.6/7/8%2B-blue.svg)
+![bricata](https://img.shields.io/badge/Bricata-4.4.1+-blue.svg)
+<a href="https://www.mongodb.com/licensing/server-side-public-license"><img src="https://img.shields.io/badge/License-SSPL-green.svg"></a>
+![0%](https://img.shields.io/badge/Coverage-0%25-red.svg)
+<a href="https://saythanks.io/to/jerodg"><img src="https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg"></a>
+
 
 Bricata API Client
 
@@ -23,7 +26,7 @@ Works with Bricata API v4.1.1
 
 ### Class Inheritence
 ```python
-from bricata_api_client.bricata_api_client import BricataApiClient
+from bricata_api_client import BricataApiClient
 
 class MyClass(BricataApiClient):
     def __init__(self):
@@ -38,7 +41,7 @@ class MyClass(BricataApiClient):
 
 ### Context Manager
 ```python
-from bricata_api_client.bricata_api_client import BricataApiClient
+from bricata_api_client import BricataApiClient
 
 with BricataApiClient(cfg='/path/to/config.toml') as bac:
     alerts = bac.get_alerts()
