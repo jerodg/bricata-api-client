@@ -42,6 +42,7 @@ aiodns = "*"
 aiohttp = "*"
 #base-api-client = "*"
 cchardet = "*"
+delorean = "*"
 tenacity = "*"
 ujson = "*"
 

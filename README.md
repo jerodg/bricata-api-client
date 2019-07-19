@@ -95,7 +95,7 @@ with BricataApiClient(cfg='/path/to/config.toml') as bac:
 - [ ] alerts
     - [ ] get /alert/{uuid} Get Alert
     - [ ] put /alert/{uuid}/_savenote Label Alert
-    - [ ] get /alerts/ List alerts
+    - [x] get /alerts/ List alerts
     - [ ] get /alerts/geo/history/ Alerts geomap history
     - [ ] get /alerts/geo/stream/ Geo Stream
     - [ ] post /alerts/malware Download Maleware file
@@ -133,7 +133,7 @@ with BricataApiClient(cfg='/path/to/config.toml') as bac:
     - [ ] delete /metadata/{index}/{doc}/{tag}/ Untag metadata
 - [ ] auth
     - [x] post /login/ Login
-    - [ ] post /logout/ Logout
+    - [x] post /logout/ Logout
     - [ ] put /users/{username}/password-token Create password reset token
     - [ ] put /users/{username}/reset-password Start password reset
     - [ ] put /users/{username}/set-password Finish password reset

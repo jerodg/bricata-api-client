@@ -32,11 +32,11 @@ def readme() -> str:
 
 def main() -> NoReturn:
     setup(name='bricata-api-client',
-          version='0!1.0a2.dev1',
+          version='0!1.0b1.dev1',
           description='Bricata API Client Library',
           long_description=readme(),
           long_description_content_type='text/markdown',
-          classifiers=['Development Status :: 3 - Alpha',
+          classifiers=['Development Status :: 4 - Beta',
                        'Environment :: Console',
                        'Intended Audience :: End Users/Desktop',
                        'Intended Audience :: Developers',
@@ -68,7 +68,7 @@ def main() -> NoReturn:
           tests_require=['pytest', 'pytest-asyncio'],
           scripts=[],
           entry_points={'console_scripts': []},
-          python_requires='>=3.6',
+          python_requires='>=3.6, <3.9',
           project_urls={'Documentation': 'https://jerodg.github.io/bricata-api-client',
                         'Source':        'https://github.com/jerodg/bricata-api-client',
                         'Bugs':          'https://github.com/jerodg/bricata-api-client/issues'},

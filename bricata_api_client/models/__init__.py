@@ -1,5 +1,5 @@
 #!/usr/bin/env python3.8
-"""Bricata API Client: Test Login
+"""Bricata API Client: Models Init
 Copyright © 2019 Jerod Gawne <https://github.com/jerodg/>
 
 This program is free software: you can redistribute it and/or modify
@@ -17,29 +17,5 @@ copies or substantial portions of the Software.
 
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
-import time
 
-import pytest
-from os import getenv
-
-from base_api_client import bprint, Results, tprint
-from bricata_api_client import BricataApiClient
-
-
-@pytest.mark.asyncio
-async def test_login():
-    ts = time.perf_counter()
-
-    bprint('Test: Login')
-    with BricataApiClient(cfg=f'{getenv("HOME")}/.config/bricata_api_client.toml') as bac:
-        results = await bac.login()
-
-        assert type(results) is Results
-        assert len(results.success) == 1
-        assert not results.failure
-
-        print('Header:', bac.header)
-
-        tprint(results)
-
-    bprint(f'-> Completed in {(time.perf_counter() - ts):f} seconds.')
+___all___ = ['BricataApiClient']

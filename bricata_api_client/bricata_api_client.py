@@ -88,6 +88,25 @@ class BricataApiClient(BaseApiClient):
 
         return results
 
+    async def get_alerts(self) -> Results:
+        if not self.header:
+            await self.login()
+
+        async with aio.ClientSession(headers=self.header, json_serialize=ujson.dumps) as session:
+            logger.debug('Getting Alerts...')
+
+            tasks = [asyncio.create_task(self.request(method='get', end_point='alerts/', session=session))]
+            results = await asyncio.gather(*tasks)
+
+            logger.debug('-> Complete.')
+
+        await session.close()
+
+        results = await self.process_results(results, 'objects')
+        self.header = None
+
+        return results
+
 
 if __name__ == '__main__':
     print(__doc__)

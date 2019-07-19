@@ -26,7 +26,7 @@
 
 [Options]
     CAPath = ""  # Full path to Certificate Authority file
-    VerifySSL = true
+    VerifySSL = true  # default
 
 [Proxy]  # Optional
     URI = ""

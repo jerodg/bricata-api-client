@@ -27,6 +27,25 @@ from bricata_api_client import BricataApiClient
 
 
 @pytest.mark.asyncio
+async def test_login():
+    ts = time.perf_counter()
+
+    bprint('Test: Login')
+    with BricataApiClient(cfg=f'{getenv("HOME")}/.config/bricata_api_client.toml') as bac:
+        results = await bac.login()
+
+        assert type(results) is Results
+        assert len(results.success) == 1
+        assert not results.failure
+
+        print('Header:', bac.header)
+
+        tprint(results)
+
+    bprint(f'-> Completed in {(time.perf_counter() - ts):f} seconds.')
+
+
+@pytest.mark.asyncio
 async def test_logout():
     ts = time.perf_counter()
 
