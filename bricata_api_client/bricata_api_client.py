@@ -43,14 +43,14 @@ class BricataApiClient(BaseApiClient):
                 config.* in the examples folder for reference.
             sem (Optional[int]): An integer that defines the number of parallel
                 requests to make."""
-        super(BricataApiClient, self).__init__(cfg=cfg, sem=sem or self.SEM)
+        BaseApiClient.__init__(self, cfg=cfg, sem=sem or self.SEM)
         self.load_config()
 
     async def __aenter__(self):
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
-        super(BricataApiClient, self).__exit__(exc_type, exc_val, exc_tb)
+        await BaseApiClient.__aexit__(self, exc_type, exc_val, exc_tb)
 
     async def login(self) -> Results:
         payload = {'username': self.cfg['Auth']['Username'], 'password': self.cfg['Auth']['Password']}
