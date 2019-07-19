@@ -400,9 +400,9 @@
 <img alt="platform" src="https://img.shields.io/badge/Platform-Linux/Unix/Windows-blue.svg" />
 <img alt="python" src="https://img.shields.io/badge/Python-3.6/7/8%2B-blue.svg" />
 <img alt="bricata" src="https://img.shields.io/badge/Bricata-4.4.1+-blue.svg" />
-<img alt="license" src="https://img.shields.io/badge/License-SSPL-green.svg" />
-<img alt="0%" src="https://img.shields.io/badge/Coverage-0%25-red.svg" /></p>
-<p><img alt="https://saythanks.io/to/jerodg" src="https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg" /></p>
+<a href="https://www.mongodb.com/licensing/server-side-public-license"><img src="https://img.shields.io/badge/License-SSPL-green.svg"></a>
+<img alt="0%" src="https://img.shields.io/badge/Coverage-0%25-red.svg" />
+<a href="https://saythanks.io/to/jerodg"><img src="https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg"></a></p>
 <p>Bricata API Client</p>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>pip install bricata-api-client
@@ -495,7 +495,7 @@
 <li class="task-list-item"><input type="checkbox" disabled/> alerts<ul class="task-list">
 <li class="task-list-item"><input type="checkbox" disabled/> get /alert/{uuid} Get Alert</li>
 <li class="task-list-item"><input type="checkbox" disabled/> put /alert/{uuid}/_savenote Label Alert</li>
-<li class="task-list-item"><input type="checkbox" disabled/> get /alerts/ List alerts</li>
+<li class="task-list-item"><input type="checkbox" disabled checked/> get /alerts/ List alerts</li>
 <li class="task-list-item"><input type="checkbox" disabled/> get /alerts/geo/history/ Alerts geomap history</li>
 <li class="task-list-item"><input type="checkbox" disabled/> get /alerts/geo/stream/ Geo Stream</li>
 <li class="task-list-item"><input type="checkbox" disabled/> post /alerts/malware Download Maleware file</li>
@@ -541,7 +541,7 @@
 </li>
 <li class="task-list-item"><input type="checkbox" disabled/> auth<ul class="task-list">
 <li class="task-list-item"><input type="checkbox" disabled checked/> post /login/ Login</li>
-<li class="task-list-item"><input type="checkbox" disabled/> post /logout/ Logout</li>
+<li class="task-list-item"><input type="checkbox" disabled checked/> post /logout/ Logout</li>
 <li class="task-list-item"><input type="checkbox" disabled/> put /users/{username}/password-token Create password reset token</li>
 <li class="task-list-item"><input type="checkbox" disabled/> put /users/{username}/reset-password Start password reset</li>
 <li class="task-list-item"><input type="checkbox" disabled/> put /users/{username}/set-password Finish password reset</li>
