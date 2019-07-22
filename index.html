@@ -250,8 +250,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#quick-start" title="Quick-Start" class="md-nav__link">
-    Quick-Start
+  <a href="#basic-usage" title="Basic Usage" class="md-nav__link">
+    Basic Usage
   </a>
   
     <nav class="md-nav">
@@ -273,6 +273,13 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation" title="Documentation" class="md-nav__link">
+    Documentation
+  </a>
   
 </li>
       
@@ -327,8 +334,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#quick-start" title="Quick-Start" class="md-nav__link">
-    Quick-Start
+  <a href="#basic-usage" title="Basic Usage" class="md-nav__link">
+    Basic Usage
   </a>
   
     <nav class="md-nav">
@@ -350,6 +357,13 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation" title="Documentation" class="md-nav__link">
+    Documentation
+  </a>
   
 </li>
       
@@ -409,7 +423,9 @@
 </pre></div>
 </td></tr></table>
 
-<h2 id="quick-start">Quick-Start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
+<h2 id="basic-usage">Basic Usage<a class="headerlink" href="#basic-usage" title="Permanent link">&para;</a></h2>
+<p>Works with Bricata API v4.1.1</p>
+<p><em>See examples folder for more</em></p>
 <h3 id="class-inheritence">Class Inheritence<a class="headerlink" href="#class-inheritence" title="Permanent link">&para;</a></h3>
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
  2
@@ -421,7 +437,7 @@
  8
  9
 10
-11</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bricata_api_client.bricata_api_client</span> <span class="kn">import</span> <span class="n">BricataApiClient</span>
+11</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bricata_api_client</span> <span class="kn">import</span> <span class="n">BricataApiClient</span>
 
 <span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="n">BricataApiClient</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -431,7 +447,7 @@
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
-        <span class="n">BricataApiClient</span><span class="o">.</span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">)</span>
+        <span class="n">BricataApiClient</span><span class="o">.</span><span class="n">__aexit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">)</span>
 </pre></div>
 </td></tr></table>
 
@@ -439,13 +455,16 @@
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
 2
 3
-4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bricata_api_client.bricata_api_client</span> <span class="kn">import</span> <span class="n">BricataApiClient</span>
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bricata_api_client</span> <span class="kn">import</span> <span class="n">BricataApiClient</span>
 
-<span class="k">with</span> <span class="n">BricataApiClient</span><span class="p">(</span><span class="n">cfg</span><span class="o">=</span><span class="s1">&#39;/path/to/config.toml&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">bac</span><span class="p">:</span>
+<span class="n">async</span> <span class="k">with</span> <span class="n">BricataApiClient</span><span class="p">(</span><span class="n">cfg</span><span class="o">=</span><span class="s1">&#39;/path/to/config.toml&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">bac</span><span class="p">:</span>
     <span class="n">alerts</span> <span class="o">=</span> <span class="n">bac</span><span class="o">.</span><span class="n">get_alerts</span><span class="p">()</span>
 </pre></div>
 </td></tr></table>
 
+<h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
+<p><a href="https://jerodg.github.io/bricata-api-client/">GitHub Pages</a>
+- Work in Process</p>
 <h2 id="api-implementation">API Implementation<a class="headerlink" href="#api-implementation" title="Permanent link">&para;</a></h2>
 <ul class="task-list">
 <li class="task-list-item"><input type="checkbox" disabled/> suricata_rules : policy<ul class="task-list">
@@ -493,7 +512,7 @@
 </ul>
 </li>
 <li class="task-list-item"><input type="checkbox" disabled/> alerts<ul class="task-list">
-<li class="task-list-item"><input type="checkbox" disabled/> get /alert/{uuid} Get Alert</li>
+<li class="task-list-item"><input type="checkbox" disabled checked/> get /alert/{uuid} Get Alert</li>
 <li class="task-list-item"><input type="checkbox" disabled/> put /alert/{uuid}/_savenote Label Alert</li>
 <li class="task-list-item"><input type="checkbox" disabled checked/> get /alerts/ List alerts</li>
 <li class="task-list-item"><input type="checkbox" disabled/> get /alerts/geo/history/ Alerts geomap history</li>
@@ -503,8 +522,8 @@
 <li class="task-list-item"><input type="checkbox" disabled/> put /alerts/tags/{tag}/ Tag Alerts</li>
 <li class="task-list-item"><input type="checkbox" disabled/> delete /alerts/tags/{tag}/ Untag Alerts</li>
 <li class="task-list-item"><input type="checkbox" disabled/> get /alerts/timeline/ Alerts timeline</li>
-<li class="task-list-item"><input type="checkbox" disabled/> put /alerts/{uuid}/tag/{tag}/ Tag Alert</li>
-<li class="task-list-item"><input type="checkbox" disabled/> delete /alerts/{uuid}/tag/{tag}/ Untag Alert</li>
+<li class="task-list-item"><input type="checkbox" disabled checked/> put /alerts/{uuid}/tag/{tag}/ Tag Alert</li>
+<li class="task-list-item"><input type="checkbox" disabled checked/> delete /alerts/{uuid}/tag/{tag}/ Untag Alert</li>
 </ul>
 </li>
 <li class="task-list-item"><input type="checkbox" disabled/> audit<ul class="task-list">
@@ -651,8 +670,8 @@
 </ul>
 </li>
 <li class="task-list-item"><input type="checkbox" disabled/> tags<ul class="task-list">
-<li class="task-list-item"><input type="checkbox" disabled/> get /tags/ List tags</li>
-<li class="task-list-item"><input type="checkbox" disabled/> put /tags/{tag}/ Upsert tag</li>
+<li class="task-list-item"><input type="checkbox" disabled checked/> get /tags/ List tags</li>
+<li class="task-list-item"><input type="checkbox" disabled checked/> put /tags/{tag}/ Upsert tag</li>
 <li class="task-list-item"><input type="checkbox" disabled/> delete /tags/{tag}/ Delete a tag</li>
 </ul>
 </li>
