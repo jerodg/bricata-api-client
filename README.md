@@ -93,7 +93,7 @@ with BricataApiClient(cfg='/path/to/config.toml') as bac:
     - [ ] post /rules/policy/bro/script/{type}/{name} Create script
     - [ ] post /rules/policy/bro/upload/{type} Upload Bro scripts file
 - [ ] alerts
-    - [ ] get /alert/{uuid} Get Alert
+    - [x] get /alert/{uuid} Get Alert
     - [ ] put /alert/{uuid}/_savenote Label Alert
     - [x] get /alerts/ List alerts
     - [ ] get /alerts/geo/history/ Alerts geomap history
@@ -223,7 +223,7 @@ with BricataApiClient(cfg='/path/to/config.toml') as bac:
     - [ ] delete /system/upgrades/files/{app}/{type}/{name} Delete upgrade file
     - [ ] get /system/upgrades/status Get upgrade status
 - [ ] tags
-    - [ ] get /tags/ List tags
+    - [x] get /tags/ List tags
     - [ ] put /tags/{tag}/ Upsert tag
     - [ ] delete /tags/{tag}/ Delete a tag
 - [ ] users

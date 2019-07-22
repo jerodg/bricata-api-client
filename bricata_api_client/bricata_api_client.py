@@ -20,7 +20,7 @@ If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
 
 import asyncio
 import logging
-from typing import Optional, Union
+from typing import NoReturn, Optional, Union
 
 import aiohttp as aio
 import ujson
@@ -51,6 +51,10 @@ class BricataApiClient(BaseApiClient):
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         await BaseApiClient.__aexit__(self, exc_type, exc_val, exc_tb)
+
+    async def __check_login(self) -> NoReturn:
+        if not self.header:
+            await self.login()
 
     async def login(self) -> Results:
         payload = {'username': self.cfg['Auth']['Username'], 'password': self.cfg['Auth']['Password']}
@@ -89,8 +93,9 @@ class BricataApiClient(BaseApiClient):
         return results
 
     async def get_alerts(self) -> Results:
-        if not self.header:
-            await self.login()
+        await self.__check_login()
+
+        # todo: handle filters
 
         async with aio.ClientSession(headers=self.header, json_serialize=ujson.dumps) as session:
             logger.debug('Getting Alerts...')
@@ -103,6 +108,60 @@ class BricataApiClient(BaseApiClient):
         await session.close()
 
         results = await self.process_results(results, 'objects')
+        self.header = None
+
+        return results
+
+    async def get_alert(self, uuid: str) -> Results:
+        await self.__check_login()
+
+        async with aio.ClientSession(headers=self.header, json_serialize=ujson.dumps) as session:
+            logger.debug('Getting Alerts...')
+
+            tasks = [asyncio.create_task(self.request(method='get', end_point=f'alert/{uuid}', session=session))]
+            results = await asyncio.gather(*tasks)
+
+            logger.debug('-> Complete.')
+
+        await session.close()
+
+        results = await self.process_results(results)
+        self.header = None
+
+        return results
+
+    async def tag_alert(self, uuid: str, tag: str):
+        await self.__check_login()
+
+        async with aio.ClientSession(headers=self.header, json_serialize=ujson.dumps) as session:
+            logger.debug('Getting Tags...')
+
+            tasks = [asyncio.create_task(self.request(method='put', end_point=f'alerts/{uuid}/tag/{tag}/', session=session))]
+            results = await asyncio.gather(*tasks)
+
+            logger.debug('-> Complete.')
+
+        await session.close()
+
+        results = await self.process_results(results)
+        self.header = None
+
+        return results
+
+    async def get_tags(self) -> Results:
+        await self.__check_login()
+
+        async with aio.ClientSession(headers=self.header, json_serialize=ujson.dumps) as session:
+            logger.debug('Getting Tags...')
+
+            tasks = [asyncio.create_task(self.request(method='get', end_point='tags/', session=session))]
+            results = await asyncio.gather(*tasks)
+
+            logger.debug('-> Complete.')
+
+        await session.close()
+
+        results = await self.process_results(results)
         self.header = None
 
         return results

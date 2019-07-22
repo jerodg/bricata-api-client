@@ -1,5 +1,5 @@
 #!/usr/bin/env python3.8
-"""Bricata API Client: Test Alerts
+"""Bricata API Client: Test Tags
 Copyright © 2019 Jerod Gawne <https://github.com/jerodg/>
 
 This program is free software: you can redistribute it and/or modify
@@ -21,48 +21,23 @@ import time
 
 import pytest
 from os import getenv
-from random import choice
 
 from base_api_client import bprint, Results, tprint
 from bricata_api_client import BricataApiClient
 
 
 @pytest.mark.asyncio
-async def test_get_alerts():
+async def test_get_tags():
     ts = time.perf_counter()
 
-    bprint('Test: Get Alerts')
-    async with BricataApiClient(cfg=f'{getenv("HOME")}/.config/bricata_api_client.toml') as bac:
-        results = await bac.get_alerts()
+    bprint('Test: Get Tags')
+    with BricataApiClient(cfg=f'{getenv("HOME")}/.config/bricata_api_client.toml') as bac:
+        results = await bac.get_tags()
 
         assert type(results) is Results
         assert len(results.success) >= 1
         assert not results.failure
 
         tprint(results, top=5)
-
-    bprint(f'-> Completed in {(time.perf_counter() - ts):f} seconds.')
-
-
-@pytest.mark.asyncio
-async def test_get_alert():
-    ts = time.perf_counter()
-
-    bprint('Test: Get Alert')
-    async with BricataApiClient(cfg=f'{getenv("HOME")}/.config/bricata_api_client.toml') as bac:
-        results = await bac.get_alerts()
-
-        assert type(results) is Results
-        assert len(results.success) >= 1
-        assert not results.failure
-
-        uid = choice(results.success)['uuid']
-        results = await bac.get_alert(uuid=uid)
-
-        assert type(results) is Results
-        assert len(results.success) == 1
-        assert not results.failure
-
-        tprint(results)
 
     bprint(f'-> Completed in {(time.perf_counter() - ts):f} seconds.')

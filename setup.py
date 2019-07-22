@@ -32,7 +32,7 @@ def readme() -> str:
 
 def main() -> NoReturn:
     setup(name='bricata-api-client',
-          version='0!1.0b1.dev1',
+          version='0!1.0b2.dev1',
           description='Bricata API Client Library',
           long_description=readme(),
           long_description_content_type='text/markdown',
