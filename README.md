@@ -36,14 +36,14 @@ class MyClass(BricataApiClient):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        BricataApiClient.__exit__(self, exc_type, exc_val, exc_tb)
+        BricataApiClient.__aexit__(self, exc_type, exc_val, exc_tb)
 ```
 
 ### Context Manager
 ```python
 from bricata_api_client import BricataApiClient
 
-with BricataApiClient(cfg='/path/to/config.toml') as bac:
+async with BricataApiClient(cfg='/path/to/config.toml') as bac:
     alerts = bac.get_alerts()
 ```
 
@@ -103,8 +103,8 @@ with BricataApiClient(cfg='/path/to/config.toml') as bac:
     - [ ] put /alerts/tags/{tag}/ Tag Alerts
     - [ ] delete /alerts/tags/{tag}/ Untag Alerts
     - [ ] get /alerts/timeline/ Alerts timeline
-    - [ ] put /alerts/{uuid}/tag/{tag}/ Tag Alert
-    - [ ] delete /alerts/{uuid}/tag/{tag}/ Untag Alert
+    - [x] put /alerts/{uuid}/tag/{tag}/ Tag Alert
+    - [x] delete /alerts/{uuid}/tag/{tag}/ Untag Alert
 - [ ] audit
     - [ ] get /audittrails/ Get audit records
 - [ ] datanodes
@@ -224,7 +224,7 @@ with BricataApiClient(cfg='/path/to/config.toml') as bac:
     - [ ] get /system/upgrades/status Get upgrade status
 - [ ] tags
     - [x] get /tags/ List tags
-    - [ ] put /tags/{tag}/ Upsert tag
+    - [x] put /tags/{tag}/ Upsert tag
     - [ ] delete /tags/{tag}/ Delete a tag
 - [ ] users
     - [ ] get /users/ List users

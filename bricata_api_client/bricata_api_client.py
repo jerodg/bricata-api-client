@@ -26,6 +26,7 @@ import aiohttp as aio
 import ujson
 
 from base_api_client import BaseApiClient, Results
+from bricata_api_client.models import TagRequest
 
 logger = logging.getLogger(__name__)
 
@@ -148,6 +149,24 @@ class BricataApiClient(BaseApiClient):
 
         return results
 
+    async def untag_alert(self, uuid: str, tag: str):
+        await self.__check_login()
+
+        async with aio.ClientSession(headers=self.header, json_serialize=ujson.dumps) as session:
+            logger.debug('Getting Tags...')
+
+            tasks = [asyncio.create_task(self.request(method='delete', end_point=f'alerts/{uuid}/tag/{tag}/', session=session))]
+            results = await asyncio.gather(*tasks)
+
+            logger.debug('-> Complete.')
+
+        await session.close()
+
+        results = await self.process_results(results)
+        self.header = None
+
+        return results
+
     async def get_tags(self) -> Results:
         await self.__check_login()
 
@@ -155,6 +174,25 @@ class BricataApiClient(BaseApiClient):
             logger.debug('Getting Tags...')
 
             tasks = [asyncio.create_task(self.request(method='get', end_point='tags/', session=session))]
+            results = await asyncio.gather(*tasks)
+
+            logger.debug('-> Complete.')
+
+        await session.close()
+
+        results = await self.process_results(results)
+        self.header = None
+
+        return results
+
+    async def put_tag(self, tag: TagRequest) -> Results:
+        await self.__check_login()
+
+        # todo: needs work
+        async with aio.ClientSession(headers=self.header, json_serialize=ujson.dumps) as session:
+            logger.debug('Getting Tags...')
+
+            tasks = [asyncio.create_task(self.request(method='put', end_point=f'tags/{tag.name}/', session=session, data=tag.dict))]
             results = await asyncio.gather(*tasks)
 
             logger.debug('-> Complete.')

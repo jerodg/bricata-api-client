@@ -66,3 +66,39 @@ async def test_get_alert():
         tprint(results)
 
     bprint(f'-> Completed in {(time.perf_counter() - ts):f} seconds.')
+
+
+@pytest.mark.asyncio
+async def test_tag_untag_alert():
+    ts = time.perf_counter()
+
+    bprint('Test: Tag Alert')
+    async with BricataApiClient(cfg=f'{getenv("HOME")}/.config/bricata_api_client.toml') as bac:
+        results = await bac.get_alerts()  # Get some alerts
+
+        assert type(results) is Results
+        assert len(results.success) >= 1
+        assert not results.failure
+
+        alert = choice(results.success)  # Choose one at random
+        uid = alert['uuid']
+
+        print(f'Tagging: {uid}')
+        print('Alert Tags Before:', alert['data']['bricata']['tag'])
+        assert 'Testing' not in results.success[0]['data']['bricata']['tag']
+
+        results = await bac.tag_alert(uuid=uid, tag='Testing')  # Tag alert
+        assert not results.failure
+
+        results = await bac.get_alert(uuid=uid)  # Verify alert is tagged
+        print('Alert tags after tag:', results.success[0]['data']['bricata']['tag'])
+        assert 'Testing' in results.success[0]['data']['bricata']['tag']
+
+        results = await  bac.untag_alert(uuid=uid, tag='Testing')  # Untag alert
+        assert not results.failure
+
+        results = await bac.get_alert(uuid=uid)  # Verify Alert is no longer tagged
+        print('Alert tags after untag:', results.success[0]['data']['bricata']['tag'])
+        assert 'Testing' not in results.success[0]['data']['bricata']['tag']
+
+    bprint(f'-> Completed in {(time.perf_counter() - ts):f} seconds.')

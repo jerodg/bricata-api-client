@@ -198,4 +198,4 @@ dmypy.json
 site/
 
 # Temp
-base_api_client/
+/base_api_client/

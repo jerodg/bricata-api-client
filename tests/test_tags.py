@@ -24,6 +24,7 @@ from os import getenv
 
 from base_api_client import bprint, Results, tprint
 from bricata_api_client import BricataApiClient
+from bricata_api_client.models import TagRequest
 
 
 @pytest.mark.asyncio
@@ -31,13 +32,32 @@ async def test_get_tags():
     ts = time.perf_counter()
 
     bprint('Test: Get Tags')
-    with BricataApiClient(cfg=f'{getenv("HOME")}/.config/bricata_api_client.toml') as bac:
+    async with BricataApiClient(cfg=f'{getenv("HOME")}/.config/bricata_api_client.toml') as bac:
         results = await bac.get_tags()
 
         assert type(results) is Results
         assert len(results.success) >= 1
         assert not results.failure
 
-        tprint(results, top=5)
+        tprint(results)
+
+    bprint(f'-> Completed in {(time.perf_counter() - ts):f} seconds.')
+
+
+@pytest.mark.asyncio
+async def test_put_tag():
+    # todo: needs work
+    ts = time.perf_counter()
+
+    bprint('Test: Put Tag')
+    async with BricataApiClient(cfg=f'{getenv("HOME")}/.config/bricata_api_client.toml') as bac:
+        tag = TagRequest(name='Test', color='#ff9800', icon='fas fa-grimace')
+        results = await bac.put_tag(tag=tag)
+
+        # assert type(results) is Results
+        # assert len(results.success) >= 1
+        # assert not results.failure
+
+        tprint(results)
 
     bprint(f'-> Completed in {(time.perf_counter() - ts):f} seconds.')
