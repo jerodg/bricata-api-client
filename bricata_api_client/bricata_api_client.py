@@ -17,7 +17,6 @@ copies or substantial portions of the Software.
 
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
-
 import asyncio
 import logging
 from typing import NoReturn, Optional, Union
@@ -51,6 +50,7 @@ class BricataApiClient(BaseApiClient):
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
+        await self.logout()
         await BaseApiClient.__aexit__(self, exc_type, exc_val, exc_tb)
 
     async def __check_login(self) -> NoReturn:
@@ -93,7 +93,7 @@ class BricataApiClient(BaseApiClient):
 
         return results
 
-    async def get_alerts(self) -> Results:
+    async def get_alerts(self, **kwargs) -> Results:
         await self.__check_login()
 
         # todo: handle filters
@@ -109,7 +109,6 @@ class BricataApiClient(BaseApiClient):
         await session.close()
 
         results = await self.process_results(results, 'objects')
-        self.header = None
 
         return results
 
@@ -127,7 +126,6 @@ class BricataApiClient(BaseApiClient):
         await session.close()
 
         results = await self.process_results(results)
-        self.header = None
 
         return results
 
@@ -145,7 +143,6 @@ class BricataApiClient(BaseApiClient):
         await session.close()
 
         results = await self.process_results(results)
-        self.header = None
 
         return results
 
@@ -163,7 +160,6 @@ class BricataApiClient(BaseApiClient):
         await session.close()
 
         results = await self.process_results(results)
-        self.header = None
 
         return results
 
@@ -181,18 +177,16 @@ class BricataApiClient(BaseApiClient):
         await session.close()
 
         results = await self.process_results(results)
-        self.header = None
 
         return results
 
     async def put_tag(self, tag: TagRequest) -> Results:
         await self.__check_login()
 
-        # todo: needs work
         async with aio.ClientSession(headers=self.header, json_serialize=ujson.dumps) as session:
             logger.debug('Getting Tags...')
 
-            tasks = [asyncio.create_task(self.request(method='put', end_point=f'tags/{tag.name}/', session=session, data=tag.dict))]
+            tasks = [asyncio.create_task(self.request(method='put', end_point=f'tags/{tag.name}/', session=session, json=tag.dict))]
             results = await asyncio.gather(*tasks)
 
             logger.debug('-> Complete.')
@@ -200,7 +194,23 @@ class BricataApiClient(BaseApiClient):
         await session.close()
 
         results = await self.process_results(results)
-        self.header = None
+
+        return results
+
+    async def delete_tag(self, tag_name: str) -> Results:
+        await self.__check_login()
+
+        async with aio.ClientSession(headers=self.header, json_serialize=ujson.dumps) as session:
+            logger.debug('Getting Tags...')
+
+            tasks = [asyncio.create_task(self.request(method='delete', end_point=f'tags/{tag_name}/', session=session))]
+            results = await asyncio.gather(*tasks)
+
+            logger.debug('-> Complete.')
+
+        await session.close()
+
+        results = await self.process_results(results)
 
         return results
 

@@ -225,7 +225,7 @@ async with BricataApiClient(cfg='/path/to/config.toml') as bac:
 - [ ] tags
     - [x] get /tags/ List tags
     - [x] put /tags/{tag}/ Upsert tag
-    - [ ] delete /tags/{tag}/ Delete a tag
+    - [x] delete /tags/{tag}/ Delete a tag
 - [ ] users
     - [ ] get /users/ List users
     - [ ] post /users/ Create a user

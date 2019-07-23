@@ -46,18 +46,44 @@ async def test_get_tags():
 
 @pytest.mark.asyncio
 async def test_put_tag():
-    # todo: needs work
     ts = time.perf_counter()
 
     bprint('Test: Put Tag')
     async with BricataApiClient(cfg=f'{getenv("HOME")}/.config/bricata_api_client.toml') as bac:
-        tag = TagRequest(name='Test', color='#ff9800', icon='fas fa-grimace')
+        tag = TagRequest(name='sea_test', color='#ff9800', icon='fas fa-grimace')
         results = await bac.put_tag(tag=tag)
+        assert type(results) is Results
+        assert not results.failure
 
-        # assert type(results) is Results
-        # assert len(results.success) >= 1
-        # assert not results.failure
+        results = await bac.get_tags()
+        assert type(results) is Results
+        assert len(results.success) >= 1
+        assert not results.failure
+
+        tags = [t['name'] for t in results.success]
+        assert 'sea_test' in tags  # Check if tag was created
 
         tprint(results)
+
+    bprint(f'-> Completed in {(time.perf_counter() - ts):f} seconds.')
+
+
+@pytest.mark.asyncio
+async def test_delete_tag():
+    ts = time.perf_counter()
+
+    bprint('Test: Delete Tag')
+    async with BricataApiClient(cfg=f'{getenv("HOME")}/.config/bricata_api_client.toml') as bac:
+        results = await bac.delete_tag(tag_name='sea_test')
+        assert type(results) is Results
+        assert not results.failure
+
+        results = await bac.get_tags()
+        assert type(results) is Results
+        assert len(results.success) >= 1
+        assert not results.failure
+
+        tags = [t['name'] for t in results.success]
+        assert 'sea_test' not in tags  # Check if tag was deleted
 
     bprint(f'-> Completed in {(time.perf_counter() - ts):f} seconds.')
