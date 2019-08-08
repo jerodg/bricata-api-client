@@ -32,7 +32,7 @@ async def test_get_tags():
     ts = time.perf_counter()
 
     bprint('Test: Get Tags')
-    async with BricataApiClient(cfg=f'{getenv("HOME")}/.config/bricata_api_client.toml') as bac:
+    async with BricataApiClient(cfg=f'{getenv("CFG_HOME")}/bricata_api_client.toml') as bac:
         results = await bac.get_tags()
 
         assert type(results) is Results
@@ -49,7 +49,7 @@ async def test_put_tag():
     ts = time.perf_counter()
 
     bprint('Test: Put Tag')
-    async with BricataApiClient(cfg=f'{getenv("HOME")}/.config/bricata_api_client.toml') as bac:
+    async with BricataApiClient(cfg=f'{getenv("CFG_HOME")}/bricata_api_client.toml') as bac:
         tag = TagRequest(name='sea_test', color='#ff9800', icon='fas fa-grimace')
         results = await bac.put_tag(tag=tag)
         assert type(results) is Results
@@ -73,7 +73,7 @@ async def test_delete_tag():
     ts = time.perf_counter()
 
     bprint('Test: Delete Tag')
-    async with BricataApiClient(cfg=f'{getenv("HOME")}/.config/bricata_api_client.toml') as bac:
+    async with BricataApiClient(cfg=f'{getenv("CFG_HOME")}/bricata_api_client.toml') as bac:
         results = await bac.delete_tag(tag_name='sea_test')
         assert type(results) is Results
         assert not results.failure

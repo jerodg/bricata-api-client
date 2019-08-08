@@ -23,11 +23,13 @@ import logging
 from dataclasses import dataclass
 from typing import Union
 
+from delorean import parse
+
 logger = logging.getLogger(__name__)
 
 
 @dataclass
-class AlertsRequest:
+class AlertsFilter:
     """
     Attributes:
         start_time (Optional[Union[str, delorean.Delorean, datetime.timedelta]]): RFC 3339 date
@@ -54,7 +56,19 @@ class AlertsRequest:
     offset: int = None
 
     def __post_init__(self):
-        pass
+        if self.start_time:
+            if type(self.start_time) is str:
+                self.start_time = parse(self.start_time).datetime
+
+            if type(self.start_time) is dt.datetime:
+                self.start_time = self.start_time.strftime(fmt='%Y-%m-%dT%H:%M:%S.%f%z')
+
+        if self.end_time:
+            if type(self.end_time) is str:
+                self.end_time = parse(self.end_time).datetime
+
+            if type(self.end_time) is dt.datetime:
+                self.end_time = self.end_time.strftime(fmt='%Y-%m-%dT%H:%M:%S.%f%z')
 
     @property
     def dict(self):

@@ -25,6 +25,7 @@ from random import choice
 
 from base_api_client import bprint, Results, tprint
 from bricata_api_client import BricataApiClient
+from bricata_api_client.models import AlertsFilter
 
 
 @pytest.mark.asyncio
@@ -32,8 +33,26 @@ async def test_get_alerts():
     ts = time.perf_counter()
 
     bprint('Test: Get Alerts')
-    async with BricataApiClient(cfg=f'{getenv("HOME")}/.config/bricata_api_client.toml') as bac:
+    async with BricataApiClient(cfg=f'{getenv("CFG_HOME")}/bricata_api_client.toml') as bac:
         results = await bac.get_alerts()
+
+        assert type(results) is Results
+        assert len(results.success) >= 1
+        assert not results.failure
+
+        tprint(results, top=5)
+
+    bprint(f'-> Completed in {(time.perf_counter() - ts):f} seconds.')
+
+
+@pytest.mark.asyncio
+async def test_get_alerts_filtered():
+    ts = time.perf_counter()
+
+    bprint('Test: Get Alerts, Filtered')
+    async with BricataApiClient(cfg=f'{getenv("CFG_HOME")}/bricata_api_client.toml') as bac:
+        af = AlertsFilter(tags='Drop')
+        results = await bac.get_alerts(af)
 
         assert type(results) is Results
         assert len(results.success) >= 1
@@ -49,14 +68,14 @@ async def test_get_alert():
     ts = time.perf_counter()
 
     bprint('Test: Get Alert')
-    async with BricataApiClient(cfg=f'{getenv("HOME")}/.config/bricata_api_client.toml') as bac:
-        results = await bac.get_alerts()
+    async with BricataApiClient(cfg=f'{getenv("CFG_HOME")}/bricata_api_client.toml') as bac:
+        results = await bac.get_alerts()  # Get some alerts
 
         assert type(results) is Results
         assert len(results.success) >= 1
         assert not results.failure
 
-        uid = choice(results.success)['uuid']
+        uid = choice(results.success)['uuid']  # Choose one at random
         results = await bac.get_alert(uuid=uid)
 
         assert type(results) is Results
@@ -73,19 +92,23 @@ async def test_tag_untag_alert():
     ts = time.perf_counter()
 
     bprint('Test: Tag Alert')
-    async with BricataApiClient(cfg=f'{getenv("HOME")}/.config/bricata_api_client.toml') as bac:
+    async with BricataApiClient(cfg=f'{getenv("CFG_HOME")}/bricata_api_client.toml') as bac:
         results = await bac.get_alerts()  # Get some alerts
 
         assert type(results) is Results
         assert len(results.success) >= 1
         assert not results.failure
 
-        alert = choice(results.success)  # Choose one at random
-        uid = alert['uuid']
+        print('results:', results.success)
 
-        print(f'Tagging: {uid}')
-        print('Alert Tags Before:', alert['data']['bricata']['tag'])
-        assert 'Testing' not in results.success[0]['data']['bricata']['tag']
+        try:
+            alert = choice(results.success)  # Choose one at random
+            uid = alert['uuid']
+            print(f'Tagging: {uid}')
+            print('Alert Tags Before:', alert['data']['bricata']['tag'])
+            assert 'Testing' not in results.success[0]['data']['bricata']['tag']
+        except KeyError:
+            print('Alert has no tags')
 
         results = await bac.tag_alert(uuid=uid, tag='Testing')  # Tag alert
         assert not results.failure

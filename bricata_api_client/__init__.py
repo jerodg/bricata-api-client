@@ -18,6 +18,6 @@ copies or substantial portions of the Software.
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
 
-from bricata_api_client.bricata_api_client import BricataApiClient
+from bricata_api_client.client import BricataApiClient
 
 ___all___ = ['BricataApiClient']

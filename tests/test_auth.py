@@ -31,7 +31,7 @@ async def test_login():
     ts = time.perf_counter()
 
     bprint('Test: Login')
-    with BricataApiClient(cfg=f'{getenv("HOME")}/.config/bricata_api_client.toml') as bac:
+    async with BricataApiClient(cfg=f'{getenv("CFG_HOME")}/bricata_api_client.toml') as bac:
         results = await bac.login()
 
         assert type(results) is Results
@@ -50,7 +50,7 @@ async def test_logout():
     ts = time.perf_counter()
 
     bprint('Test: Logout')
-    with BricataApiClient(cfg=f'{getenv("HOME")}/.config/bricata_api_client.toml') as bac:
+    async with BricataApiClient(cfg=f'{getenv("CFG_HOME")}/bricata_api_client.toml') as bac:
         await bac.login()
         print('Header after login:', bac.header)
 
