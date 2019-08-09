@@ -4,8 +4,8 @@
 | _ \ '_| / _/ _` |  _/ _` |  / _ \|  _/| |  | (__| | / -_) ' \  _|
 |___/_| |_\__\__,_|\__\__,_| /_/ \_\_| |___|  \___|_|_\___|_||_\__|
 ```
-![platform](https://img.shields.io/badge/Platform-Linux/Unix/Windows-blue.svg)
-![python](https://img.shields.io/badge/Python-3.6/7/8%2B-blue.svg)
+![platform](https://img.shields.io/badge/Platform-Mac/*nix/Windows-blue.svg)
+![python](https://img.shields.io/badge/Python-8%2B-blue.svg)
 ![bricata](https://img.shields.io/badge/Bricata-4.4.1+-blue.svg)
 <a href="https://www.mongodb.com/licensing/server-side-public-license"><img src="https://img.shields.io/badge/License-SSPL-green.svg"></a>
 ![0%](https://img.shields.io/badge/Coverage-0%25-red.svg)
@@ -13,6 +13,9 @@
 
 
 Bricata API Client
+
+*Note:* I am currently working on 14+ client api's, features will be implemented as needed. 
+Submit an issue if you have a feature-request.
 
 ## Installation
 ```bash
@@ -51,7 +54,7 @@ async with BricataApiClient(cfg='/path/to/config.toml') as bac:
 [GitHub Pages](https://jerodg.github.io/bricata-api-client/)
 - Work in Process
 
-## API Implementation
+## API Implementation (9/170) ~5.3%
 - [ ] suricata_rules : policy
     - [ ] post /rules/file/suricata/-import/ Import from URL
     - [ ] post /rules/file/suricata/-upload/ Import suricata rules
