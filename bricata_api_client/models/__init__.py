@@ -1,5 +1,5 @@
 #!/usr/bin/env python3.8
-"""Bricata API Client: Init
+"""Bricata API Client: Models Init
 Copyright © 2019 Jerod Gawne <https://github.com/jerodg/>
 
 This program is free software: you can redistribute it and/or modify
@@ -18,6 +18,5 @@ copies or substantial portions of the Software.
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
 
-from bricata_api_client.client import BricataApiClient
-
-___all___ = ['BricataApiClient']
+from bricata_api_client.models.alerts import AlertsFilter
+from bricata_api_client.models.tags import TagRequest

@@ -4,12 +4,18 @@
 | _ \ '_| / _/ _` |  _/ _` |  / _ \|  _/| |  | (__| | / -_) ' \  _|
 |___/_| |_\__\__,_|\__\__,_| /_/ \_\_| |___|  \___|_|_\___|_||_\__|
 ```
-![platform](https://img.shields.io/badge/platform-Linux/Unix/Windows-blue.svg)
-![python](https://img.shields.io/badge/python-3.6/7/8%2B-blue.svg)
-![license](https://img.shields.io/badge/license-SSPL-green.svg)
-![0%](https://img.shields.io/badge/coverage-0%25-red.svg)
+![platform](https://img.shields.io/badge/Platform-Mac/*nix/Windows-blue.svg)
+![python](https://img.shields.io/badge/Python-8%2B-blue.svg)
+![bricata](https://img.shields.io/badge/Bricata-4.4.1+-blue.svg)
+<a href="https://www.mongodb.com/licensing/server-side-public-license"><img src="https://img.shields.io/badge/License-SSPL-green.svg"></a>
+![0%](https://img.shields.io/badge/Coverage-0%25-red.svg)
+<a href="https://saythanks.io/to/jerodg"><img src="https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg"></a>
+
 
 Bricata API Client
+
+*Note:* I am currently working on 14+ client api's, features will be implemented as needed. 
+Submit an issue if you have a feature-request.
 
 ## Installation
 ```bash
@@ -23,7 +29,7 @@ Works with Bricata API v4.1.1
 
 ### Class Inheritence
 ```python
-from bricata_api_client.bricata_api_client import BricataApiClient
+from bricata_api_client import BricataApiClient
 
 class MyClass(BricataApiClient):
     def __init__(self):
@@ -33,14 +39,14 @@ class MyClass(BricataApiClient):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        BricataApiClient.__exit__(self, exc_type, exc_val, exc_tb)
+        BricataApiClient.__aexit__(self, exc_type, exc_val, exc_tb)
 ```
 
 ### Context Manager
 ```python
-from bricata_api_client.bricata_api_client import BricataApiClient
+from bricata_api_client import BricataApiClient
 
-with BricataApiClient(cfg='/path/to/config.toml') as bac:
+async with BricataApiClient(cfg='/path/to/config.toml') as bac:
     alerts = bac.get_alerts()
 ```
 
@@ -48,7 +54,7 @@ with BricataApiClient(cfg='/path/to/config.toml') as bac:
 [GitHub Pages](https://jerodg.github.io/bricata-api-client/)
 - Work in Process
 
-## API Implementation
+## API Implementation (9/170) ~5.3%
 - [ ] suricata_rules : policy
     - [ ] post /rules/file/suricata/-import/ Import from URL
     - [ ] post /rules/file/suricata/-upload/ Import suricata rules
@@ -90,9 +96,9 @@ with BricataApiClient(cfg='/path/to/config.toml') as bac:
     - [ ] post /rules/policy/bro/script/{type}/{name} Create script
     - [ ] post /rules/policy/bro/upload/{type} Upload Bro scripts file
 - [ ] alerts
-    - [ ] get /alert/{uuid} Get Alert
+    - [x] get /alert/{uuid} Get Alert
     - [ ] put /alert/{uuid}/_savenote Label Alert
-    - [ ] get /alerts/ List alerts
+    - [x] get /alerts/ List alerts
     - [ ] get /alerts/geo/history/ Alerts geomap history
     - [ ] get /alerts/geo/stream/ Geo Stream
     - [ ] post /alerts/malware Download Maleware file
@@ -100,8 +106,8 @@ with BricataApiClient(cfg='/path/to/config.toml') as bac:
     - [ ] put /alerts/tags/{tag}/ Tag Alerts
     - [ ] delete /alerts/tags/{tag}/ Untag Alerts
     - [ ] get /alerts/timeline/ Alerts timeline
-    - [ ] put /alerts/{uuid}/tag/{tag}/ Tag Alert
-    - [ ] delete /alerts/{uuid}/tag/{tag}/ Untag Alert
+    - [x] put /alerts/{uuid}/tag/{tag}/ Tag Alert
+    - [x] delete /alerts/{uuid}/tag/{tag}/ Untag Alert
 - [ ] audit
     - [ ] get /audittrails/ Get audit records
 - [ ] datanodes
@@ -130,7 +136,7 @@ with BricataApiClient(cfg='/path/to/config.toml') as bac:
     - [ ] delete /metadata/{index}/{doc}/{tag}/ Untag metadata
 - [ ] auth
     - [x] post /login/ Login
-    - [ ] post /logout/ Logout
+    - [x] post /logout/ Logout
     - [ ] put /users/{username}/password-token Create password reset token
     - [ ] put /users/{username}/reset-password Start password reset
     - [ ] put /users/{username}/set-password Finish password reset
@@ -220,9 +226,9 @@ with BricataApiClient(cfg='/path/to/config.toml') as bac:
     - [ ] delete /system/upgrades/files/{app}/{type}/{name} Delete upgrade file
     - [ ] get /system/upgrades/status Get upgrade status
 - [ ] tags
-    - [ ] get /tags/ List tags
-    - [ ] put /tags/{tag}/ Upsert tag
-    - [ ] delete /tags/{tag}/ Delete a tag
+    - [x] get /tags/ List tags
+    - [x] put /tags/{tag}/ Upsert tag
+    - [x] delete /tags/{tag}/ Delete a tag
 - [ ] users
     - [ ] get /users/ List users
     - [ ] post /users/ Create a user
