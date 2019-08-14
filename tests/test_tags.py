@@ -51,11 +51,14 @@ async def test_put_tag():
     bprint('Test: Put Tag')
     async with BricataApiClient(cfg=f'{getenv("CFG_HOME")}/bricata_api_client.toml') as bac:
         tag = TagRequest(name='sea_test', color='#ff9800', icon='fas fa-grimace')
+
         results = await bac.put_tag(tag=tag)
+
         assert type(results) is Results
         assert not results.failure
 
         results = await bac.get_tags()
+
         assert type(results) is Results
         assert len(results.success) >= 1
         assert not results.failure
@@ -75,10 +78,12 @@ async def test_delete_tag():
     bprint('Test: Delete Tag')
     async with BricataApiClient(cfg=f'{getenv("CFG_HOME")}/bricata_api_client.toml') as bac:
         results = await bac.delete_tag(tag_name='sea_test')
+
         assert type(results) is Results
         assert not results.failure
 
         results = await bac.get_tags()
+
         assert type(results) is Results
         assert len(results.success) >= 1
         assert not results.failure

@@ -65,16 +65,16 @@ def main() -> NoReturn:
           name='bricata-api-client',
           package_data={'bricata-api-client': []},
           packages=find_packages(),
-          project_urls={'Bugs'         : 'https://github.com/jerodg/bricata-api-client/issues',
+          project_urls={'Bugs':          'https://github.com/jerodg/bricata-api-client/issues',
                         'Documentation': 'https://jerodg.github.io/bricata-api-client',
-                        'Funding'      : 'Paypal: jerod@jerodg.dev',
-                        'Say Thanks!'  : 'https://saythanks.io/to/jerodg',
-                        'Source'       : 'https://github.com/jerodg/bricata-api-client'},
+                        'Funding':       'Paypal: jerod@jerodg.dev',
+                        'Say Thanks!':   'https://saythanks.io/to/jerodg',
+                        'Source':        'https://github.com/jerodg/bricata-api-client'},
           python_requires='>=3.7, <3.9',
           setup_requires=['pytest-runner'],
           tests_require=['pytest', 'pytest-asyncio'],
           url='https://pypi.org/project/bricata-api-client/',
-          version='0!0.4.0',
+          version='0!0.5.0',
           zip_safe=True)
 
 

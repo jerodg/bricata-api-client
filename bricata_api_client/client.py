@@ -45,6 +45,7 @@ class BricataApiClient(BaseApiClient):
             sem (Optional[int]): An integer that defines the number of parallel
                 requests to make."""
         BaseApiClient.__init__(self, cfg=cfg, sem=sem or self.SEM)
+        self.header = None
 
     async def __aenter__(self):
         return self
@@ -60,41 +61,36 @@ class BricataApiClient(BaseApiClient):
     async def login(self) -> Results:
         payload = {'username': self.cfg['Auth']['Username'], 'password': self.cfg['Auth']['Password']}
 
-        async with aio.ClientSession(headers=self.HDR, json_serialize=ujson.dumps) as session:
-            logger.debug('Logging In...')
+        logger.debug('Logging in to Bricata...')
 
-            tasks = [asyncio.create_task(self.request(method='post',
-                                                      end_point='/login/',
-                                                      session=session,
-                                                      request_id=uuid4().hex,
-                                                      json=payload))]
-            results = Results(data=await asyncio.gather(*tasks))
+        tasks = [asyncio.create_task(self.request(method='post',
+                                                  end_point='/login/',
+                                                  request_id=uuid4().hex,
+                                                  json=payload))]
+        results = Results(data=await asyncio.gather(*tasks))
 
-            logger.debug('-> Complete.')
-
-        await session.close()
+        logger.debug('-> Complete.')
 
         results = await self.process_results(results)
 
         self.header = {**self.HDR, **{'Authorization': f'{results.success[0]["token_type"]} {results.success[0]["token"]}'}}
-
+        await self.session.close()
+        self.session = aio.ClientSession(headers=self.header, json_serialize=ujson.dumps)
         return results
 
     async def logout(self) -> Results:
         payload = {'username': self.cfg['Auth']['Username']}
 
-        async with aio.ClientSession(headers=self.header, json_serialize=ujson.dumps) as session:
-            logger.debug('Logging Out...')
+        logger.debug('Logging out of Bricata...')
 
-            tasks = [asyncio.create_task(self.request(method='post', end_point='/logout/',
-                                                      session=session,
-                                                      request_id=uuid4().hex,
-                                                      json=payload))]
-            results = Results(data=await asyncio.gather(*tasks))
+        tasks = [asyncio.create_task(self.request(method='post',
+                                                  end_point='/logout/',
+                                                  request_id=uuid4().hex,
+                                                  json=payload))]
+        results = Results(data=await asyncio.gather(*tasks))
 
-            logger.debug('-> Complete.')
+        logger.debug('-> Complete.')
 
-        await session.close()
         self.header = None
 
         return await self.process_results(results)
@@ -102,121 +98,96 @@ class BricataApiClient(BaseApiClient):
     async def get_alerts(self, filters: Optional[AlertsFilter] = None) -> Results:
         await self.__check_login()
 
-        async with aio.ClientSession(headers=self.header, json_serialize=ujson.dumps) as session:
-            logger.debug('Getting Alerts...')
+        logger.debug('Getting alerts from Bricata...')
 
-            tasks = [asyncio.create_task(self.request(method='get',
-                                                      end_point='/alerts/',
-                                                      session=session,
-                                                      request_id=uuid4().hex,
-                                                      params=filters.dict if filters else None))]
-            results = Results(data=await asyncio.gather(*tasks))
+        tasks = [asyncio.create_task(self.request(method='get',
+                                                  end_point='/alerts/',
+                                                  request_id=uuid4().hex,
+                                                  params=filters.dict if filters else None))]
+        results = Results(data=await asyncio.gather(*tasks))
 
-            logger.debug('-> Complete.')
-
-        await session.close()
+        logger.debug('-> Complete.')
 
         return await self.process_results(results, 'objects')
 
     async def get_alert(self, uuid: str) -> Results:
         await self.__check_login()
 
-        async with aio.ClientSession(headers=self.header, json_serialize=ujson.dumps) as session:
-            logger.debug('Getting Alerts...')
+        logger.debug(f'Getting alert: {uuid}, from Bricata...')
 
-            tasks = [asyncio.create_task(self.request(method='get',
-                                                      end_point=f'/alert/{uuid}',
-                                                      session=session,
-                                                      request_id=uuid4().hex))]
-            results = Results(data=await asyncio.gather(*tasks))
+        tasks = [asyncio.create_task(self.request(method='get',
+                                                  end_point=f'/alert/{uuid}',
+                                                  request_id=uuid4().hex))]
+        results = Results(data=await asyncio.gather(*tasks))
 
-            logger.debug('-> Complete.')
-
-        await session.close()
+        logger.debug('-> Complete.')
 
         return await self.process_results(results)
 
     async def tag_alert(self, uuid: str, tag: str):
         await self.__check_login()
 
-        async with aio.ClientSession(headers=self.header, json_serialize=ujson.dumps) as session:
-            logger.debug('Getting Tags...')
+        logger.debug(f'Tagging: {tag} alert: {uuid}, in Bricata...')
 
-            tasks = [asyncio.create_task(self.request(method='put',
-                                                      end_point=f'/alerts/{uuid}/tag/{tag}/',
-                                                      session=session,
-                                                      request_id=uuid4().hex))]
-            results = Results(data=await asyncio.gather(*tasks))
+        tasks = [asyncio.create_task(self.request(method='put',
+                                                  end_point=f'/alerts/{uuid}/tag/{tag}/',
+                                                  request_id=uuid4().hex))]
+        results = Results(data=await asyncio.gather(*tasks))
 
-            logger.debug('-> Complete.')
-
-        await session.close()
+        logger.debug('-> Complete.')
 
         return await self.process_results(results)
 
     async def untag_alert(self, uuid: str, tag: str):
         await self.__check_login()
 
-        async with aio.ClientSession(headers=self.header, json_serialize=ujson.dumps) as session:
-            logger.debug('Getting Tags...')
+        logger.debug(f'Untagging: {tag} from alert: {uuid}, in Bricata...')
 
-            tasks = [asyncio.create_task(self.request(method='delete',
-                                                      end_point=f'/alerts/{uuid}/tag/{tag}/',
-                                                      session=session,
-                                                      request_id=uuid4().hex))]
-            results = Results(data=await asyncio.gather(*tasks))
+        tasks = [asyncio.create_task(self.request(method='delete',
+                                                  end_point=f'/alerts/{uuid}/tag/{tag}/',
+                                                  request_id=uuid4().hex))]
+        results = Results(data=await asyncio.gather(*tasks))
 
-            logger.debug('-> Complete.')
-
-        await session.close()
+        logger.debug('-> Complete.')
 
         return await self.process_results(results)
 
     async def get_tags(self) -> Results:
         await self.__check_login()
 
-        async with aio.ClientSession(headers=self.header, json_serialize=ujson.dumps) as session:
-            logger.debug('Getting Tags...')
+        logger.debug('Getting tags from Bricata...')
 
-            tasks = [asyncio.create_task(self.request(method='get', end_point='/tags/', session=session, request_id=uuid4().hex, ))]
-            results = Results(data=await asyncio.gather(*tasks))
+        tasks = [asyncio.create_task(self.request(method='get', end_point='/tags/', request_id=uuid4().hex, ))]
+        results = Results(data=await asyncio.gather(*tasks))
 
-            logger.debug('-> Complete.')
-
-        await session.close()
+        logger.debug('-> Complete.')
 
         return await self.process_results(results)
 
     async def put_tag(self, tag: TagRequest) -> Results:
         await self.__check_login()
 
-        async with aio.ClientSession(headers=self.header, json_serialize=ujson.dumps) as session:
-            logger.debug('Getting Tags...')
+        logger.debug(f'Creating tag: {tag} in Bricata...')
 
-            tasks = [asyncio.create_task(
-                    self.request(method='put', end_point=f'/tags/{tag.name}/', session=session, request_id=uuid4().hex,
-                                 json=tag.dict))]
-            results = Results(data=await asyncio.gather(*tasks))
+        tasks = [asyncio.create_task(
+                self.request(method='put', end_point=f'/tags/{tag.name}/', request_id=uuid4().hex,
+                             json=tag.dict))]
+        results = Results(data=await asyncio.gather(*tasks))
 
-            logger.debug('-> Complete.')
-
-        await session.close()
+        logger.debug('-> Complete.')
 
         return await self.process_results(results)
 
     async def delete_tag(self, tag_name: str) -> Results:
         await self.__check_login()
 
-        async with aio.ClientSession(headers=self.header, json_serialize=ujson.dumps) as session:
-            logger.debug('Getting Tags...')
+        logger.debug(f'Deleting tag: {tag_name}, from Bricata...')
 
-            tasks = [asyncio.create_task(
-                    self.request(method='delete', end_point=f'/tags/{tag_name}/', session=session, request_id=uuid4().hex))]
-            results = Results(data=await asyncio.gather(*tasks))
+        tasks = [asyncio.create_task(
+                self.request(method='delete', end_point=f'/tags/{tag_name}/', request_id=uuid4().hex))]
+        results = Results(data=await asyncio.gather(*tasks))
 
-            logger.debug('-> Complete.')
-
-        await session.close()
+        logger.debug('-> Complete.')
 
         return await self.process_results(results)
 

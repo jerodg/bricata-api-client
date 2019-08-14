@@ -47,6 +47,9 @@ async def test_login():
 
 @pytest.mark.asyncio
 async def test_logout():
+    """The call to self.logout() in __aexit__() throws an error due to the
+       session already being closed. This is expected behavior; comment it when
+       testing this function."""
     ts = time.perf_counter()
 
     bprint('Test: Logout')

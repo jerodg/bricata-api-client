@@ -117,7 +117,7 @@ async def test_tag_untag_alert():
         print('Alert tags after tag:', results.success[0]['data']['bricata']['tag'])
         assert 'Testing' in results.success[0]['data']['bricata']['tag']
 
-        results = await  bac.untag_alert(uuid=uid, tag='Testing')  # Untag alert
+        results = await bac.untag_alert(uuid=uid, tag='Testing')  # Untag alert
         assert not results.failure
 
         results = await bac.get_alert(uuid=uid)  # Verify Alert is no longer tagged

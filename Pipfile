@@ -36,6 +36,8 @@ setuptools = "*"
 toml = "*"
 twine = "*"
 wheel = "*"
+# Need until pypi is up:
+diskcache = "*"
 
 [packages]
 aiodns = "*"
