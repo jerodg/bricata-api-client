@@ -55,7 +55,6 @@ def main() -> NoReturn:
                             'aiohttp',
                             'base-api-client',
                             'cchardet',
-                            'delorean',
                             'tenacity',
                             'ujson'],
           keywords='Bricata API Client rest',
@@ -74,7 +73,7 @@ def main() -> NoReturn:
           setup_requires=['pytest-runner'],
           tests_require=['pytest', 'pytest-asyncio'],
           url='https://pypi.org/project/bricata-api-client/',
-          version='0!0.5.0',
+          version='0!0.5.1',
           zip_safe=True)
 
 

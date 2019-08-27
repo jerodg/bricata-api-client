@@ -52,6 +52,7 @@ class BricataApiClient(BaseApiClient):
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         await self.logout()
+        await self.session.close()
         await BaseApiClient.__aexit__(self, exc_type, exc_val, exc_tb)
 
     async def __check_login(self) -> NoReturn:
@@ -106,7 +107,7 @@ class BricataApiClient(BaseApiClient):
                                                   params=filters.dict if filters else None))]
         results = Results(data=await asyncio.gather(*tasks))
 
-        logger.debug('-> Complete.')
+        logger.debug(f'-> Complete; Retrieved {len(results.data)}, alerts.')
 
         return await self.process_results(results, 'objects')
 
