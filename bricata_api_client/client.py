@@ -52,7 +52,6 @@ class BricataApiClient(BaseApiClient):
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         await self.logout()
-        await self.session.close()
         await BaseApiClient.__aexit__(self, exc_type, exc_val, exc_tb)
 
     async def __check_login(self) -> NoReturn:

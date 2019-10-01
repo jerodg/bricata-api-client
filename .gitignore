@@ -199,3 +199,6 @@ site/
 
 # Temp
 /base_api_client/
+
+# Mac
+.DS_Store
