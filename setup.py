@@ -18,6 +18,7 @@ copies or substantial portions of the Software.
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
 import logging
+import sys
 from typing import NoReturn
 
 from setuptools import find_packages, setup
@@ -43,7 +44,6 @@ def main() -> NoReturn:
                        'Operating System :: MacOS :: MacOS X',
                        'Operating System :: Microsoft :: Windows',
                        'Operating System :: POSIX',
-                       'Programming Language :: Python :: 3.7',
                        'Programming Language :: Python :: 3.8',
                        'Topic :: Utilities',
                        'Topic :: Internet',
@@ -51,13 +51,10 @@ def main() -> NoReturn:
           description='Bricata API Client Library',
           entry_points={'console_scripts': []},
           include_package_data=True,
-          install_requires=['aiodns',
-                            'aiohttp',
-                            'base-api-client',
-                            'cchardet',
-                            'tenacity',
-                            'ujson'],
-          keywords='Bricata API Client rest',
+          install_requires=['aiohttp',
+                            'base-api-client'
+                            'delorean'],
+          keywords='bricata api client rest',
           license='Server Side Public License (SSPL)',
           long_description_content_type='text/markdown',
           long_description=readme(),
@@ -69,11 +66,11 @@ def main() -> NoReturn:
                         'Funding':       'https://www.paypal.me/jerodgawne',
                         'Say Thanks!':   'https://saythanks.io/to/jerodg',
                         'Source':        'https://github.com/jerodg/bricata-api-client'},
-          python_requires='>=3.7, <3.9',
-          setup_requires=['pytest-runner'],
+          python_requires='>=3.8, <3.9',
+          setup_requires=[] + ['pytest-runner'] if {'pytest', 'test', 'ptr'}.intersection(sys.argv) else [],
           tests_require=['pytest', 'pytest-asyncio'],
           url='https://pypi.org/project/bricata-api-client/',
-          version='0!0.5.2',
+          version='0!0.6.0',
           zip_safe=True)
 
 

@@ -23,7 +23,7 @@ from typing import NoReturn, Optional, Union
 from uuid import uuid4
 
 import aiohttp as aio
-import ujson
+import rapidjson
 
 from base_api_client import BaseApiClient, Results
 from bricata_api_client.models import AlertsFilter, TagRequest
@@ -35,7 +35,7 @@ class BricataApiClient(BaseApiClient):
     """Bricata API Client"""
     SEM: int = 5  # This defines the number of parallel async requests to make.
 
-    def __init__(self, cfg: Union[str, dict], sem: Optional[int] = None):
+    def __init__(self, cfg: Union[str, dict]):
         """Initializes Class
 
         Args:
@@ -44,7 +44,7 @@ class BricataApiClient(BaseApiClient):
                 config.* in the examples folder for reference.
             sem (Optional[int]): An integer that defines the number of parallel
                 requests to make."""
-        BaseApiClient.__init__(self, cfg=cfg, sem=sem or self.SEM)
+        BaseApiClient.__init__(self, cfg=cfg)
         self.header = None
 
     async def __aenter__(self):
@@ -75,7 +75,8 @@ class BricataApiClient(BaseApiClient):
 
         self.header = {**self.HDR, **{'Authorization': f'{results.success[0]["token_type"]} {results.success[0]["token"]}'}}
         await self.session.close()
-        self.session = aio.ClientSession(headers=self.header, json_serialize=ujson.dumps)
+
+        self.session = aio.ClientSession(headers=self.header, json_serialize=rapidjson.dumps)
         return results
 
     async def logout(self) -> Results:

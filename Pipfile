@@ -16,11 +16,15 @@
 
 #You should have received a copy of the SSPL along with this program.
 #If not, see <https://www.mongodb.com/licensing/server-side-public-license>.
-
 [[source]]
-url = 'https://pypi.python.org/simple'
-verify_ssl = true
-name = 'pypi'
+url = 'http://slflokydcaims01.info53.com:3141/root/sea-pypi/+simple/'
+verify_ssl = false
+name = 'sea-pypi'
+
+#[[source]]
+#url = 'https://pypi.python.org/simple'
+#verify_ssl = true
+#name = 'pypi'
 
 [dev-packages]
 better-exceptions = "*"
@@ -38,15 +42,9 @@ twine = "*"
 wheel = "*"
 
 [packages]
-aiodns = "*"
 aiohttp = "*"
 base-api-client = "*"
-cchardet = "*"
-tenacity = "*"
-ujson = "*"
+delorean = "*"
 
 [requires]
 python_version = "3.8"
-
-[pipenv]
-allow_prereleases = true

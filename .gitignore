@@ -286,5 +286,5 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# Temporary
-base_api_client/
+# MkDocs
+site/
