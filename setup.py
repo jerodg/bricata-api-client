@@ -52,7 +52,7 @@ def main() -> NoReturn:
           entry_points={'console_scripts': []},
           include_package_data=True,
           install_requires=['aiohttp',
-                            'base-api-client'
+                            'base-api-client',
                             'delorean'],
           keywords='bricata api client rest',
           license='Server Side Public License (SSPL)',
@@ -70,7 +70,7 @@ def main() -> NoReturn:
           setup_requires=[] + ['pytest-runner'] if {'pytest', 'test', 'ptr'}.intersection(sys.argv) else [],
           tests_require=['pytest', 'pytest-asyncio'],
           url='https://pypi.org/project/bricata-api-client/',
-          version='0!0.6.0',
+          version='0!0.6.1',
           zip_safe=True)
 
 
