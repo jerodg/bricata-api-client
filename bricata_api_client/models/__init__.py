@@ -20,3 +20,4 @@ If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
 
 from bricata_api_client.models.alerts import AlertsFilter
 from bricata_api_client.models.tags import TagRequest
+from bricata_api_client.models.query import AlertQuery

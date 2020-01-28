@@ -25,7 +25,7 @@ from random import choice
 
 from base_api_client import bprint, Results, tprint
 from bricata_api_client import BricataApiClient
-from bricata_api_client.models import AlertsFilter
+from bricata_api_client.models import AlertsFilter, AlertQuery
 
 
 @pytest.mark.asyncio
@@ -34,7 +34,8 @@ async def test_get_alerts():
 
     bprint('Test: Get Alerts')
     async with BricataApiClient(cfg=f'{getenv("CFG_HOME")}/bricata_api_client.toml') as bac:
-        results = await bac.get_alerts()
+        results = await bac.get_records(AlertQuery())
+        # print('results:\n\t', results)
 
         assert type(results) is Results
         assert len(results.success) >= 1
@@ -43,6 +44,26 @@ async def test_get_alerts():
         tprint(results, top=5)
 
     bprint(f'-> Completed in {(time.perf_counter() - ts):f} seconds.')
+
+
+# @pytest.mark.asyncio
+# async def test_get_alerts_filtered():
+#     ts = time.perf_counter()
+#
+#     bprint('Test: Get Alerts, Filtered')
+#     async with BricataApiClient(cfg=f'{getenv("CFG_HOME")}/bricata_api_client.toml') as bac:
+#         results = await bac.get_records(AlertQuery())
+#         count = len(results.success)
+#
+#         results = await bac.get_records(AlertQuery(tags='ATO'))
+#
+#         # assert type(results) is Results
+#         # assert count > len(results.success)
+#         # assert not results.failure
+#
+#         tprint(results, top=5)
+#
+#     bprint(f'-> Completed in {(time.perf_counter() - ts):f} seconds.')
 
 
 @pytest.mark.asyncio

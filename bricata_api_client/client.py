@@ -26,7 +26,7 @@ import aiohttp as aio
 import rapidjson
 
 from base_api_client import BaseApiClient, Results
-from bricata_api_client.models import AlertsFilter, TagRequest
+from bricata_api_client.models import AlertsFilter, TagRequest, AlertQuery
 
 logger = logging.getLogger(__name__)
 
@@ -95,6 +95,27 @@ class BricataApiClient(BaseApiClient):
         self.header = None
 
         return await self.process_results(results)
+
+    async def get_records(self, query: Union[AlertQuery]) -> Results:
+        """
+        Args:
+            query (Union[AlertQuery]):
+
+        Returns:
+            results (Results)"""
+        await self.__check_login()
+
+        logger.debug(f'Getting {type(query)}, record(s)...')
+        tasks = [asyncio.create_task(self.request(method='get',
+                                                  end_point=query.end_point,
+                                                  request_id=uuid4().hex,
+                                                  params=query.dict()))]
+
+        results = await self.process_results(Results(data=await asyncio.gather(*tasks)), query.data_key)
+
+        logger.debug('-> Complete.')
+
+        return results
 
     async def get_alerts(self, filters: Optional[AlertsFilter] = None) -> Results:
         await self.__check_login()
